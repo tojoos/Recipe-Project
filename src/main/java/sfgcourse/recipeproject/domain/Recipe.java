@@ -1,6 +1,7 @@
 package sfgcourse.recipeproject.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,23 +14,24 @@ public class Recipe {
     private String description;
     private String source;
     private String url;
-    private String directions;
     private Integer prepTime;
     private Integer cookTime;
     private Integer servings;
 
     @Lob
     private Byte[] image;
+    @Lob
+    private String directions;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    private Set<Ingredient> ingredients;
+    private Set<Ingredient> ingredients = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "recipe_category", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id") )
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
     @Enumerated(value = EnumType.STRING)
     private Difficulty difficulty;

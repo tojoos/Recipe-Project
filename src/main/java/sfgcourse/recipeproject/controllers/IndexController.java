@@ -1,5 +1,6 @@
 package sfgcourse.recipeproject.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import sfgcourse.recipeproject.services.RecipeService;
 
 import java.util.Optional;
 
+@Slf4j
 @Controller
 public class IndexController {
 
@@ -31,10 +33,7 @@ public class IndexController {
 
     @RequestMapping({"","/","index"})
     public String getIndexPage(Model model) {
-        Optional<Category> categoryOptional = categoryRepository.findByCategoryName("American");
-        Optional<UnitOfMeasure> unitOfMeasureOptional = unitOfMeasureRepository.findByUom("Tablespoon");
-
-        System.out.println("Category ID: " + categoryOptional.get().getId() + " UoM ID: " + unitOfMeasureOptional.get().getId());
+       log.debug("Getting index page");
 
         model.addAttribute("recipes", recipeService.getRecipes());
         return "index";

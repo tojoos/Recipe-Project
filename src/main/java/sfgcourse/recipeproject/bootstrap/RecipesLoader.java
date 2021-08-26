@@ -3,6 +3,7 @@ package sfgcourse.recipeproject.bootstrap;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import sfgcourse.recipeproject.domain.*;
 import sfgcourse.recipeproject.repositories.CategoryRepository;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
@@ -25,6 +26,7 @@ public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent>
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
         recipeRepository.saveAll(getRecipes());
     }

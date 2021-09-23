@@ -6,6 +6,7 @@ import sfgcourse.recipeproject.domain.Recipe;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -24,5 +25,11 @@ public class RecipeServiceImpl implements RecipeService {
         Set<Recipe> recipes = new HashSet<>();
         recipeRepository.findAll().forEach(recipes::add);
         return recipes;
+    }
+
+    @Override
+    public Recipe findById(Long id) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+        return recipeOptional.orElse(null);
     }
 }

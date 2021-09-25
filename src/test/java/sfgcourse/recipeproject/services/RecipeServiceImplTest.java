@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import sfgcourse.recipeproject.converters.RecipeCommandToRecipe;
+import sfgcourse.recipeproject.converters.RecipeToRecipeCommand;
 import sfgcourse.recipeproject.domain.Recipe;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 
@@ -20,10 +22,16 @@ class RecipeServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipeConverter;
+
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommandConverter;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipeConverter, recipeToRecipeCommandConverter);
     }
 
     @Test

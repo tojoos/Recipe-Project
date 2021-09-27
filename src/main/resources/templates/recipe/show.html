@@ -78,7 +78,7 @@
                                 <h1 class="card-title">Ingredients</h1>
                             </div>
                             <div class="col-md-2">
-                                <form th:action="@{'/recipe/' + ${recipe.id} + '/ingredients'}" method="post">
+                                <form th:action="@{'/recipe/' + ${recipe.id} + '/ingredients'}" method="get">
                                     <button class="btn btn-light" type="submit">View</button>
                                 </form>
                             </div>

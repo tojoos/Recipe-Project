@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
-import sfgcourse.recipeproject.domain.Notes;
 import sfgcourse.recipeproject.domain.Recipe;
 import sfgcourse.recipeproject.services.RecipeService;
 
@@ -31,12 +30,12 @@ class IndexControllerTest {
     @Mock
     RecipeService recipeService;
 
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        indexController = new IndexController(recipeService);
-    }
+        indexController = new IndexController(recipeService); }
 
     @Test
     public void testMockMVC() throws Exception {

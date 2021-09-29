@@ -9,8 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class IngredientCommand {
     private Long id;
+    private Long RecipeId;
     private String description;
     private BigDecimal amount;
-    private RecipeCommand recipe;
     private UnitOfMeasureCommand uom;
 }

@@ -1,5 +1,6 @@
 package sfgcourse.recipeproject.controllers;
 
+import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +30,13 @@ public class IngredientController {
         return "recipe/ingredient/list";
     }
 
-    @RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/show")
+    @GetMapping("recipe/{recipeId}/ingredient/{ingredientId}/show")
     public String showIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
         model.addAttribute("ingredient", ingredientService.findCommandByRecipeIdandIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId)));
         return "recipe/ingredient/show";
     }
 
-    @RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/update")
+    @GetMapping("recipe/{recipeId}/ingredient/{ingredientId}/update")
     public String updateIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
         model.addAttribute("ingredient", ingredientService.findCommandByRecipeIdandIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId)));
         model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
@@ -58,7 +59,7 @@ public class IngredientController {
         return "recipe/ingredient/ingredientform";
     }
 
-    @RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/delete")
+    @GetMapping("recipe/{recipeId}/ingredient/{ingredientId}/delete")
     public String deleteIngredientCommandById(@PathVariable String recipeId, @PathVariable String ingredientId) {
         ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(ingredientId));
         return "redirect:/recipe/" + recipeId + "/ingredients";

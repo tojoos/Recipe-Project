@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sfgcourse.recipeproject.commands.IngredientCommand;
+import sfgcourse.recipeproject.commands.RecipeCommand;
+import sfgcourse.recipeproject.commands.UnitOfMeasureCommand;
 import sfgcourse.recipeproject.services.IngredientService;
 import sfgcourse.recipeproject.services.RecipeService;
 import sfgcourse.recipeproject.services.UnitOfMeasureService;
@@ -44,6 +46,16 @@ public class IngredientController {
     public String saveOrUpdateIngredient(@ModelAttribute IngredientCommand command) {
         IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
         return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+    }
+
+    @GetMapping("recipe/{recipeId}/ingredient/new")
+    public String saveIngredientCommand(@PathVariable String recipeId, Model model) {
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+        ingredientCommand.setUom(new UnitOfMeasureCommand());
+        model.addAttribute("ingredient", ingredientCommand);
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+        return "recipe/ingredient/ingredientform";
     }
 
 }

@@ -7,12 +7,14 @@ import sfgcourse.recipeproject.converters.IngredientCommandToIngredient;
 import sfgcourse.recipeproject.converters.IngredientToIngredientCommand;
 import sfgcourse.recipeproject.domain.Ingredient;
 import sfgcourse.recipeproject.domain.Recipe;
+import sfgcourse.recipeproject.repositories.IngredientRepository;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 import sfgcourse.recipeproject.repositories.UnitOfMeasureRepository;
 
 import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -23,7 +25,8 @@ public class IngredientServiceImpl implements IngredientService {
     IngredientToIngredientCommand ingToIngCommandConverter;
     IngredientCommandToIngredient ingCommandToIngConverter;
 
-    public IngredientServiceImpl(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository, IngredientToIngredientCommand ingToIngCommandConverter, IngredientCommandToIngredient ingCommandToIngConverter) {
+    public IngredientServiceImpl(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository,
+                                 IngredientToIngredientCommand ingToIngCommandConverter, IngredientCommandToIngredient ingCommandToIngConverter) {
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
         this.ingToIngCommandConverter = ingToIngCommandConverter;
@@ -59,9 +62,19 @@ public class IngredientServiceImpl implements IngredientService {
     @Transactional
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(ingredientCommand.getRecipeId());
-
+        
         if(optionalRecipe.isPresent()) {
             Recipe recipe = optionalRecipe.get();
+            if(ingredientCommand.getId() == null) {
+                long maxId = 1;
+                for(Recipe r : recipeRepository.findAll()) {
+                    for(Ingredient ing : r.getIngredients()) {
+                        if(ing.getId() >= maxId)
+                            maxId = ing.getId();
+                    }
+                }
+                ingredientCommand.setId(maxId + 1);
+            }
 
             Optional<Ingredient> optionalIngredient = recipe.getIngredients()
                     .stream()
@@ -92,6 +105,8 @@ public class IngredientServiceImpl implements IngredientService {
             return new IngredientCommand();
         }
     }
+
+
 
 
 }

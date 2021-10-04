@@ -9,6 +9,7 @@ import sfgcourse.recipeproject.commands.UnitOfMeasureCommand;
 import sfgcourse.recipeproject.converters.*;
 import sfgcourse.recipeproject.domain.Ingredient;
 import sfgcourse.recipeproject.domain.Recipe;
+import sfgcourse.recipeproject.repositories.IngredientRepository;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 import sfgcourse.recipeproject.repositories.UnitOfMeasureRepository;
 
@@ -88,10 +89,9 @@ class IngredientServiceImplTest {
         //when
         when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
         when(recipeRepository.save(any())).thenReturn(savedRecipe);
-
+        IngredientCommand savedIngredientCommand = ingredientService.saveIngredientCommand(ingredientCommand);
 
         //then
-        IngredientCommand savedIngredientCommand = ingredientService.saveIngredientCommand(ingredientCommand);
         assertNotNull(savedIngredientCommand);
         assertEquals(ingredientCommand.getId(), savedIngredientCommand.getId());
         verify(recipeRepository, times(1)).findById(anyLong());

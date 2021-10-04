@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import sfgcourse.recipeproject.commands.IngredientCommand;
 import sfgcourse.recipeproject.commands.RecipeCommand;
 import sfgcourse.recipeproject.commands.UnitOfMeasureCommand;
+import sfgcourse.recipeproject.domain.Ingredient;
 import sfgcourse.recipeproject.domain.UnitOfMeasure;
 import sfgcourse.recipeproject.services.IngredientService;
 import sfgcourse.recipeproject.services.RecipeService;
@@ -81,7 +82,7 @@ class IngredientControllerTest {
     }
 
     @Test
-    void updateIngredient() throws Exception {
+    void testUpdateIngredient() throws Exception {
         //given
         IngredientCommand ingredientCommand = new IngredientCommand();
 
@@ -97,7 +98,7 @@ class IngredientControllerTest {
     }
 
     @Test
-    void saveOrUpdateIngredient() throws Exception {
+    void testSaveOrUpdateIngredient() throws Exception {
         //given
         IngredientCommand command = new IngredientCommand();
         command.setId(5L);
@@ -113,6 +114,5 @@ class IngredientControllerTest {
                 .param("description", "description example"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/3/ingredient/5/show"));
-
     }
 }

@@ -33,8 +33,15 @@
                                 </ul>
                             </div>
                             <div class="col-md-6">
-                                <img th:src="@{/images/guacamole400x400.jpg}"
-                                     width="200" height="200">
+                                <span th:switch="${recipe.image==null}">
+                                    <img th:case="true"
+                                         th:src="@{/images/noimagefound.jpg}"
+                                         width="200" height="200">
+                                    <img th:case="false"
+                                         th:src="@{'/recipe/' + ${recipe.id} + '/recipeimage'}"
+                                         width="200" height="200" alt="">
+                                </span>
+
                             </div>
                         </div>
                         <div class="row">

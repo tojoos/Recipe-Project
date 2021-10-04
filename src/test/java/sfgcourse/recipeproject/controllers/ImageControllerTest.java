@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -12,9 +13,11 @@ import sfgcourse.recipeproject.commands.RecipeCommand;
 import sfgcourse.recipeproject.services.ImageService;
 import sfgcourse.recipeproject.services.RecipeService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -69,5 +72,33 @@ class ImageControllerTest {
                 .andExpect(header().string("Location", "/recipe/1/show"));
 
         verify(imageService, times(1)).saveImageFile(anyLong(), any());
+    }
+
+    @Test
+    void testRenderImageFromDB() throws Exception {
+        //given
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(2L);
+
+        String someBytes = "some bytes";
+        Byte[] bytes = new Byte[someBytes.getBytes(StandardCharsets.UTF_8).length];
+
+        int i = 0;
+        for(byte b : someBytes.getBytes(StandardCharsets.UTF_8))
+            bytes[i++] = b;
+
+        recipeCommand.setImage(bytes);
+
+        //when
+        when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+
+        MockHttpServletResponse response = mockMvc.perform(get("/recipe/2/recipeimage"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        byte[] responseBytes = response.getContentAsByteArray();
+
+        //then
+        assertEquals(someBytes.getBytes(StandardCharsets.UTF_8).length, responseBytes.length);
     }
 }

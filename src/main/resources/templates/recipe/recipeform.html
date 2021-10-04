@@ -56,10 +56,11 @@
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label>Difficulty:</label>
-                                    <select class="form-control">
-                                        <option>Easy</option>
-                                        <option>Moderate</option>
-                                        <option>Hard</option>
+                                    <select class="form-control" th:field="*{difficulty}">
+                                        <option th:each="diff : ${T(sfgcourse.recipeproject.domain.Difficulty).values()}"
+                                                th:value="${diff.name()}"
+                                                th:text="${diff.name()}">
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -84,11 +85,11 @@
                     <div class="card border border-info">
                         <div class="card-header bg-primary text-light">
                             <div class="row">
-                                <div class="col-md-11">
+                                <div class="col-md-10">
                                     <h4 class="card-title">Ingredients</h4>
                                 </div>
-                                <div class="col-md-1">
-                                    <a class="btn btn-light"  href="#" role="button">Edit</a>
+                                <div class="col-md-2">
+                                    <a class="btn btn-light"  th:href="'/recipe/' + ${recipe.id} + '/ingredients'" role="button">Edit</a>
                                 </div>
                             </div>
                         </div>

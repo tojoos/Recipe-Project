@@ -70,7 +70,7 @@ public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent>
         perfectGuacamole.setCookTime(0);
         perfectGuacamole.setDescription("Perfect Guacamole");
         perfectGuacamole.setServings(4);
-        perfectGuacamole.setDifficulty(Difficulty.EASY);
+        perfectGuacamole.setDifficulty(Difficulty.HARD);
         perfectGuacamole.getCategories().add(americanCategory);
         perfectGuacamole.getCategories().add(mexicanCategory);
         perfectGuacamole.setSource("simplyrecipes.com");
@@ -151,6 +151,7 @@ public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent>
         chickenTaco.addIngredient(new Ingredient("lime, cut into wedges", new BigDecimal(4), eachUom));
 
         recipeList.add(chickenTaco);
+
 
         return recipeList;
     }

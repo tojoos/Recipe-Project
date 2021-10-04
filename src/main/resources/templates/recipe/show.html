@@ -13,17 +13,35 @@
         <div class="col-md-6 md-offset-3 mx-auto">
             <div class="card card-primary border border-info">
                 <div class="card-header bg-primary text-light">
-                        <h1 class="card-title" th:text="${recipe.description}">Recipe Description Here!</h1>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h1 class="card-title" th:text="${recipe.description}">Recipe Description Here!</h1>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="#" th:href="'/recipe/' + ${recipe.id} + '/image'" class="btn btn-light" type="button">Upload</a>
+                        </div>
                     </div>
+                </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3">
                                 <h5>Categories:</h5>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-3">
                                 <ul>
                                     <li th:each="category : ${recipe.categories}" th:text="${category.categoryName}">Category</li>
                                 </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <span th:switch="${recipe.image==null}">
+                                    <img th:case="true"
+                                         th:src="@{/images/noimagefound.jpg}"
+                                         width="200" height="200">
+                                    <img th:case="false"
+                                         th:src="@{'/recipe/' + ${recipe.id} + '/recipeimage'}"
+                                         width="200" height="200" alt="">
+                                </span>
+
                             </div>
                         </div>
                         <div class="row">

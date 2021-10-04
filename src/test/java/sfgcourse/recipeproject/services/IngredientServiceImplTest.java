@@ -43,7 +43,7 @@ class IngredientServiceImplTest {
     }
 
     @Test
-    void findCommandByRecipeIdandIngredientId() {
+    void testFindCommandByRecipeIdandIngredientId() {
         //given
         Recipe recipe = new Recipe();
         recipe.setId(4L);
@@ -74,7 +74,7 @@ class IngredientServiceImplTest {
     }
 
     @Test
-    void saveIngredientCommand() {
+    void testSaveIngredientCommand() {
         //given
         IngredientCommand ingredientCommand = new IngredientCommand();
         ingredientCommand.setId(3L);
@@ -95,6 +95,34 @@ class IngredientServiceImplTest {
         assertNotNull(savedIngredientCommand);
         assertEquals(ingredientCommand.getId(), savedIngredientCommand.getId());
         verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).save(any(Recipe.class));
+    }
+
+    @Test
+    void testDeleteById() {
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(2L);
+
+        Ingredient ing1 = new Ingredient();
+        ing1.setId(1L);
+        Ingredient ing2 = new Ingredient();
+        ing2.setId(2L);
+        Ingredient ing3 = new Ingredient();
+        ing3.setId(3L);
+
+        recipe.getIngredients().add(ing1);
+        recipe.getIngredients().add(ing2);
+        recipe.getIngredients().add(ing3);
+
+
+        //when
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        ingredientService.deleteById(2L, 3L);
+
+        //then
+        assertEquals(2L, recipeRepository.findById(2L).get().getIngredients().size());
+        verify(recipeRepository, times(2)).findById(anyLong());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
     }
 }

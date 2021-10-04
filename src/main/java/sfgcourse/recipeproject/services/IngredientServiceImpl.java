@@ -62,7 +62,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Transactional
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(ingredientCommand.getRecipeId());
-        
+
         if(optionalRecipe.isPresent()) {
             Recipe recipe = optionalRecipe.get();
             if(ingredientCommand.getId() == null) {
@@ -106,7 +106,27 @@ public class IngredientServiceImpl implements IngredientService {
         }
     }
 
+    @Override
+    public void deleteById(Long recipeId, Long ingredientId) {
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
 
+        if(optionalRecipe.isPresent()) {
+            Recipe recipe = optionalRecipe.get();
 
+            Optional<Ingredient> optionalIngredient = recipe.getIngredients().stream()
+                    .filter(ing -> ing.getId().equals(ingredientId))
+                    .findFirst();
 
+            if(optionalIngredient.isPresent()) {
+                Ingredient ingToDelete = optionalIngredient.get();
+                ingToDelete.setRecipe(null);
+                recipe.getIngredients().remove(ingToDelete);
+                recipeRepository.save(recipe);
+            } else {
+                throw new RuntimeException("Ingredient id: " + ingredientId + " not found in Recipe id: " + recipeId + ".");
+            }
+        } else {
+            throw new RuntimeException("Recipe id: " + recipeId + " not found in database.");
+        }
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sfgcourse.recipeproject.domain.Recipe;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -22,7 +23,25 @@ public class ImageServiceImpl implements ImageService {
     public void saveImageFile(Long recipeId, MultipartFile file) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
 
-        //todo implement file saving method
+        if(optionalRecipe.isPresent()) {
+            Recipe recipe = optionalRecipe.get();
+            try {
+                Byte[] byteObjects = new Byte[file.getBytes().length];
+                int i = 0;
+                for (byte b : file.getBytes())
+                    byteObjects[i++] = b;
+
+                recipe.setImage(byteObjects);
+                recipeRepository.save(recipe);
+
+            } catch (IOException exception) {
+                //todo handle exception
+                log.error("Error occurred: ", exception);
+                exception.printStackTrace();
+            }
+        } else {
+            log.debug("Recipe id: " + recipeId + " not found.");
+        }
         log.debug("Loaded new file.");
     }
 }

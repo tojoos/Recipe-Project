@@ -9,15 +9,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import sfgcourse.recipeproject.commands.IngredientCommand;
 import sfgcourse.recipeproject.commands.RecipeCommand;
-import sfgcourse.recipeproject.commands.UnitOfMeasureCommand;
-import sfgcourse.recipeproject.domain.Ingredient;
-import sfgcourse.recipeproject.domain.UnitOfMeasure;
 import sfgcourse.recipeproject.services.IngredientService;
 import sfgcourse.recipeproject.services.RecipeService;
 import sfgcourse.recipeproject.services.UnitOfMeasureService;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;

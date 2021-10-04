@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import sfgcourse.recipeproject.commands.IngredientCommand;
 import sfgcourse.recipeproject.domain.Ingredient;
 
-
 @Component
 public class IngredientCommandToIngredient implements Converter<IngredientCommand, Ingredient> {
 

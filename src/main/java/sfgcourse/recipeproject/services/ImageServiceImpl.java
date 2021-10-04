@@ -33,7 +33,6 @@ public class ImageServiceImpl implements ImageService {
 
                 recipe.setImage(byteObjects);
                 recipeRepository.save(recipe);
-
             } catch (IOException exception) {
                 //todo handle exception
                 log.error("Error occurred: ", exception);
@@ -44,4 +43,6 @@ public class ImageServiceImpl implements ImageService {
         }
         log.debug("Loaded new file.");
     }
+
+
 }

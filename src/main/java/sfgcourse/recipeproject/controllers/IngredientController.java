@@ -1,11 +1,9 @@
 package sfgcourse.recipeproject.controllers;
 
-import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sfgcourse.recipeproject.commands.IngredientCommand;
-import sfgcourse.recipeproject.commands.RecipeCommand;
 import sfgcourse.recipeproject.commands.UnitOfMeasureCommand;
 import sfgcourse.recipeproject.services.IngredientService;
 import sfgcourse.recipeproject.services.RecipeService;
@@ -24,7 +22,7 @@ public class IngredientController {
         this.unitOfMeasureService = unitOfMeasureService;
     }
 
-    @GetMapping("/recipe/{id}/ingredients")
+    @GetMapping("recipe/{id}/ingredients")
     public String showIngredients(@PathVariable String id, Model model) {
         model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
         return "recipe/ingredient/list";
@@ -64,5 +62,4 @@ public class IngredientController {
         ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(ingredientId));
         return "redirect:/recipe/" + recipeId + "/ingredients";
     }
-
 }

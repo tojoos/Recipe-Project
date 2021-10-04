@@ -7,8 +7,6 @@ import sfgcourse.recipeproject.repositories.UnitOfMeasureRepository;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {

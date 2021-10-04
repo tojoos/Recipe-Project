@@ -7,14 +7,12 @@ import sfgcourse.recipeproject.converters.IngredientCommandToIngredient;
 import sfgcourse.recipeproject.converters.IngredientToIngredientCommand;
 import sfgcourse.recipeproject.domain.Ingredient;
 import sfgcourse.recipeproject.domain.Recipe;
-import sfgcourse.recipeproject.repositories.IngredientRepository;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 import sfgcourse.recipeproject.repositories.UnitOfMeasureRepository;
 
 import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service

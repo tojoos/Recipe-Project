@@ -10,7 +10,6 @@ import sfgcourse.recipeproject.domain.UnitOfMeasure;
 import sfgcourse.recipeproject.repositories.UnitOfMeasureRepository;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;

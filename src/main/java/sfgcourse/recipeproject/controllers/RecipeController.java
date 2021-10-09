@@ -9,6 +9,7 @@ import sfgcourse.recipeproject.services.RecipeService;
 
 @Slf4j
 @Controller
+@RequestMapping("recipes")
 public class RecipeController {
 
     private final RecipeService recipeService;
@@ -17,37 +18,34 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/recipe/{id}/show")
-    public String showById(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
+    @GetMapping("/{id}/show")
+    public String showById(@PathVariable Long id, Model model) {
+        model.addAttribute("recipe", recipeService.findById(id));
         return "recipe/show";
     }
 
-    @GetMapping("recipe/new")
+    @GetMapping("/new")
     public String newRecipe(Model model) {
         model.addAttribute("recipe", new RecipeCommand());
-
         return "recipe/recipeform";
     }
 
-    @GetMapping("recipe/{id}/update")
-    public String updateRecipe(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
+    @GetMapping("/{id}/update")
+    public String initUpdateRecipeForm(@PathVariable Long id, Model model) {
+        model.addAttribute("recipe", recipeService.findCommandById(id));
         return "recipe/recipeform";
     }
 
-    @PostMapping("recipe")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
+    @PostMapping("/process")
+    public String processSaveOrUpdateRecipeForm(@ModelAttribute RecipeCommand command) {
         RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(command);
-
-        return "redirect:/recipe/" + savedRecipeCommand.getId() + "/show";
+        return "redirect:/recipes/" + savedRecipeCommand.getId() + "/show";
     }
 
-    @GetMapping("recipe/{id}/delete")
-    public String deleteById(@PathVariable String id) {
+    @GetMapping("/{id}/delete")
+    public String deleteRecipeById(@PathVariable String id) {
         log.debug("Deleting id: " + id);
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";
     }
-
 }

@@ -11,7 +11,7 @@
     <div class="container-fluid" style="margin: 20px">
         <div class="row">
             <div class="col-md-6 md-offset-3 mx-auto">
-                <form th:object="${recipe}" th:action="@{/recipe/}" method="post">
+                <form th:object="${recipe}" th:action="@{/recipes/process}" method="post">
                     <input type="hidden" th:field="*{id}"/>
                     <div class="card border border-info">
                         <div class="card-header bg-primary text-light">
@@ -21,7 +21,9 @@
                             <div class="row">
                                 <div class="col-md-3 form-group">
                                 <label>Recipe Description:</label>
-                                <input type="text" class="form-control" th:field="*{description}"/>
+                                    <label>
+                                        <input type="text" class="form-control" th:field="*{description}"/>
+                                    </label>
                                 </div>
                             </div>
                             <p></p>
@@ -89,7 +91,7 @@
                                     <h4 class="card-title">Ingredients</h4>
                                 </div>
                                 <div class="col-md-2">
-                                    <a class="btn btn-light"  th:href="'/recipe/' + ${recipe.id} + '/ingredients'" role="button">Edit</a>
+                                    <a class="btn btn-light"  th:href="'/recipes/' + ${recipe.id} + '/ingredients'" role="button">Edit</a>
                                 </div>
                             </div>
                         </div>

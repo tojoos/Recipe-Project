@@ -10,6 +10,7 @@ import sfgcourse.recipeproject.services.RecipeService;
 import sfgcourse.recipeproject.services.UnitOfMeasureService;
 
 @Controller
+@RequestMapping("recipes/{recipeId}/ingredients")
 public class IngredientController {
 
     private final RecipeService recipeService;
@@ -22,44 +23,44 @@ public class IngredientController {
         this.unitOfMeasureService = unitOfMeasureService;
     }
 
-    @GetMapping("recipe/{id}/ingredients")
-    public String showIngredients(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
+    @GetMapping("")
+    public String showIngredients(@PathVariable Long recipeId, Model model) {
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         return "recipe/ingredient/list";
     }
 
-    @GetMapping("recipe/{recipeId}/ingredient/{ingredientId}/show")
-    public String showIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
-        model.addAttribute("ingredient", ingredientService.findCommandByRecipeIdandIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId)));
+    @GetMapping("/{ingredientId}/show")
+    public String showIngredient(@PathVariable Long recipeId, @PathVariable Long ingredientId, Model model) {
+        model.addAttribute("ingredient", ingredientService.findCommandByRecipeIdandIngredientId((recipeId), ingredientId));
         return "recipe/ingredient/show";
     }
 
-    @GetMapping("recipe/{recipeId}/ingredient/{ingredientId}/update")
-    public String updateIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
-        model.addAttribute("ingredient", ingredientService.findCommandByRecipeIdandIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId)));
+    @GetMapping("/{ingredientId}/update")
+    public String initUpdateIngredient(@PathVariable Long recipeId, @PathVariable Long ingredientId, Model model) {
+        model.addAttribute("ingredient", ingredientService.findCommandByRecipeIdandIngredientId(recipeId, ingredientId));
         model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         return "recipe/ingredient/ingredientform";
     }
 
-    @PostMapping("recipe/{recipeId}/ingredient")
-    public String saveOrUpdateIngredient(@ModelAttribute IngredientCommand command) {
-        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
-        return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
-    }
-
-    @GetMapping("recipe/{recipeId}/ingredient/new")
-    public String saveIngredientCommand(@PathVariable String recipeId, Model model) {
+    @GetMapping("/new")
+    public String initAddNewIngredient(@PathVariable Long recipeId, Model model) {
         IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+        ingredientCommand.setRecipeId(recipeId);
         ingredientCommand.setUom(new UnitOfMeasureCommand());
         model.addAttribute("ingredient", ingredientCommand);
         model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         return "recipe/ingredient/ingredientform";
     }
 
-    @GetMapping("recipe/{recipeId}/ingredient/{ingredientId}/delete")
+    @PostMapping("/process")
+    public String processSaveOrUpdateIngredient(@ModelAttribute IngredientCommand command) {
+        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
+        return "redirect:/recipes/" + savedCommand.getRecipeId() + "/ingredients/" + savedCommand.getId() + "/show";
+    }
+
+    @GetMapping("/{ingredientId}/delete")
     public String deleteIngredientCommandById(@PathVariable String recipeId, @PathVariable String ingredientId) {
         ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(ingredientId));
-        return "redirect:/recipe/" + recipeId + "/ingredients";
+        return "redirect:/recipes/" + recipeId + "/ingredients";
     }
 }

@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 class ImageControllerTest {
+
     @Mock
     ImageService imageService;
 
@@ -50,7 +51,7 @@ class ImageControllerTest {
         when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
 
         //then
-        mockMvc.perform(get("/recipe/1/image"))
+        mockMvc.perform(get("/recipes/1/image"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/imageform"))
                 .andExpect(model().attributeExists("recipe"));
@@ -63,10 +64,10 @@ class ImageControllerTest {
         MockMultipartFile file = new MockMultipartFile("imagefile", "testing.txt",
                 "text/plain", "Spring Framework".getBytes(StandardCharsets.UTF_8));
 
-        mockMvc.perform(multipart("/recipe/1/image").file(file))
+        mockMvc.perform(multipart("/recipes/1/image").file(file))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/1/show"))
-                .andExpect(header().string("Location", "/recipe/1/show"));
+                .andExpect(view().name("redirect:/recipes/1/show"))
+                .andExpect(header().string("Location", "/recipes/1/show"));
 
         verify(imageService, times(1)).saveImageFile(anyLong(), any());
     }
@@ -89,7 +90,7 @@ class ImageControllerTest {
         //when
         when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
 
-        MockHttpServletResponse response = mockMvc.perform(get("/recipe/2/recipeimage"))
+        MockHttpServletResponse response = mockMvc.perform(get("/recipes/2/recipeimage"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 

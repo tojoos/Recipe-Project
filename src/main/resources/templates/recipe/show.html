@@ -18,7 +18,7 @@
                             <h1 class="card-title" th:text="${recipe.description}">Recipe Description Here!</h1>
                         </div>
                         <div class="col-md-2">
-                            <a href="#" th:href="'/recipe/' + ${recipe.id} + '/image'" class="btn btn-light" type="button">Upload</a>
+                            <a href="#" th:href="'/recipes/' + ${recipe.id} + '/image'" class="btn btn-light" type="button">Upload</a>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                                          th:src="@{/images/noimagefound.jpg}"
                                          width="200" height="200">
                                     <img th:case="false"
-                                         th:src="@{'/recipe/' + ${recipe.id} + '/recipeimage'}"
+                                         th:src="@{'/recipes/' + ${recipe.id} + '/recipeimage'}"
                                          width="200" height="200" alt="">
                                 </span>
 
@@ -96,7 +96,7 @@
                                 <h1 class="card-title">Ingredients</h1>
                             </div>
                             <div class="col-md-2">
-                                <form th:action="@{'/recipe/' + ${recipe.id} + '/ingredients'}" method="get">
+                                <form th:action="@{'/recipes/' + ${recipe.id} + '/ingredients'}" method="get">
                                     <button class="btn btn-light" type="submit">View</button>
                                 </form>
                             </div>

@@ -17,8 +17,8 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <form action="http:\\localhost" method="post" enctype="multipart/form-data"
-                                  th:action="@{'/recipe/' + ${recipe.id} + '/image'}">
+                            <form method="post" enctype="multipart/form-data"
+                                  th:action="@{'/recipes/' + ${recipe.id} + '/image'}">
                                 <div class="row">
                                     <div class="col-md-10">
                                         <label class="control-label">Select File</label>

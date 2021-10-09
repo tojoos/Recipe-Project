@@ -43,7 +43,7 @@ class RecipeControllerTest {
 
         when(recipeService.findById(anyLong())).thenReturn(recipe);
 
-        mockMvc.perform(get("/recipe/1/show"))
+        mockMvc.perform(get("/recipes/1/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"))
                 .andExpect(model().attributeExists("recipe"));
@@ -52,7 +52,7 @@ class RecipeControllerTest {
 
     @Test
     void testGetNewRecipeForm() throws Exception {
-        mockMvc.perform(get("/recipe/new"))
+        mockMvc.perform(get("/recipes/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipeform"))
                 .andExpect(model().attributeExists("recipe"));
@@ -65,14 +65,13 @@ class RecipeControllerTest {
 
         when(recipeService.saveRecipeCommand(any())).thenReturn(command);
 
-        mockMvc.perform(post("/recipe")
+        mockMvc.perform(post("/recipes/process")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id","")
                 .param("description","some string")
         )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/2/show"));
-
+                .andExpect(view().name("redirect:/recipes/2/show"));
     }
 
     @Test
@@ -82,7 +81,7 @@ class RecipeControllerTest {
 
         when(recipeService.findCommandById(anyLong())).thenReturn(command);
 
-        mockMvc.perform(get("/recipe/1/update"))
+        mockMvc.perform(get("/recipes/1/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipeform"))
                 .andExpect(model().attributeExists("recipe"));
@@ -90,7 +89,7 @@ class RecipeControllerTest {
 
     @Test
     void testDeleteRecipeMapping() throws Exception {
-        mockMvc.perform(get("/recipe/2/delete"))
+        mockMvc.perform(get("/recipes/2/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 

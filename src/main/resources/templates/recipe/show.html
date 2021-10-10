@@ -5,8 +5,8 @@
 <div class="container-fluid" style="margin: 20px">
     <div class="row">
         <div class="col-md-6 md-offset-3 mx-auto">
-            <div class="card card-primary border border-info">
-                <div class="card-header bg-primary text-light">
+            <div class="card">
+                <div class="card-header">
                     <div class="row">
                         <div class="col-md-10">
                             <h1 class="card-title" th:text="${recipe.description}">Recipe Description Here!</h1>
@@ -83,16 +83,14 @@
                     </div>
                 </div>
                 <p></p>
-                <div class="card card-primary border border-info">
-                    <div class="card-header bg-primary text-light">
+                <div class="card">
+                    <div class="card-header">
                         <div class="row">
                             <div class="col-md-10">
                                 <h1 class="card-title">Ingredients</h1>
                             </div>
                             <div class="col-md-2">
-                                <form th:action="@{'/recipes/' + ${recipe.id} + '/ingredients'}" method="get">
-                                    <button class="btn btn-light" type="submit">View</button>
-                                </form>
+                                <a href="#" th:href="'/recipes/' + ${recipe.id} + '/ingredients'" class="btn btn-light" type="button">Edit</a>
                             </div>
                         </div>
                     </div>
@@ -106,8 +104,8 @@
                     </div>
                 </div>
                 <p></p>
-                <div class="card card-primary border border-info">
-                    <div class="card-header bg-primary text-light">
+                <div class="card">
+                    <div class="card-header">
                         <h1 class="card-title">Directions</h1>
                     </div>
                     <div class="card-body">
@@ -117,8 +115,8 @@
                     </div>
                 </div>
                 <p></p>
-                <div class="card card-primary border border-info">
-                    <div class="card-header bg-primary text-light">
+                <div class="card">
+                    <div class="card-header">
                         <h1 class="card-title">Notes</h1>
                     </div>
                     <div class="card-body">

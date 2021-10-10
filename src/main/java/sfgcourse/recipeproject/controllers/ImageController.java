@@ -54,5 +54,4 @@ public class ImageController {
             IOUtils.copy(inputStream, response.getOutputStream());
         }
     }
-
 }

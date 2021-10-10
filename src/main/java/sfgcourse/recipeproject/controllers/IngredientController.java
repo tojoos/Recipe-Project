@@ -31,7 +31,7 @@ public class IngredientController {
 
     @GetMapping("/{ingredientId}/show")
     public String showIngredient(@PathVariable Long recipeId, @PathVariable Long ingredientId, Model model) {
-        model.addAttribute("ingredient", ingredientService.findCommandByRecipeIdandIngredientId((recipeId), ingredientId));
+        model.addAttribute("ingredient", ingredientService.findCommandByRecipeIdandIngredientId(recipeId, ingredientId));
         return "recipe/ingredient/show";
     }
 

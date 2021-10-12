@@ -6,6 +6,7 @@ import sfgcourse.recipeproject.commands.RecipeCommand;
 import sfgcourse.recipeproject.converters.RecipeCommandToRecipe;
 import sfgcourse.recipeproject.converters.RecipeToRecipeCommand;
 import sfgcourse.recipeproject.domain.Recipe;
+import sfgcourse.recipeproject.exceptions.NotFoundException;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 
 import javax.transaction.Transactional;
@@ -41,7 +42,12 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe findById(Long id) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
-        return recipeOptional.orElse(null);
+
+        if(recipeOptional.isEmpty()) {
+            throw new NotFoundException("Recipe Not Found");
+        }
+
+        return recipeOptional.get();
     }
 
     @Transactional

@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import sfgcourse.recipeproject.commands.RecipeCommand;
 import sfgcourse.recipeproject.domain.Recipe;
+import sfgcourse.recipeproject.exceptions.NotFoundException;
 import sfgcourse.recipeproject.services.RecipeService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -47,6 +48,14 @@ class RecipeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"))
                 .andExpect(model().attributeExists("recipe"));
+    }
+
+    @Test
+    void showByIdNotFound() throws Exception {
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipes/2/show"))
+                .andExpect(status().isNotFound());
     }
 
 

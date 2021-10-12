@@ -8,6 +8,7 @@ import sfgcourse.recipeproject.commands.RecipeCommand;
 import sfgcourse.recipeproject.converters.RecipeCommandToRecipe;
 import sfgcourse.recipeproject.converters.RecipeToRecipeCommand;
 import sfgcourse.recipeproject.domain.Recipe;
+import sfgcourse.recipeproject.exceptions.NotFoundException;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 
 import java.util.HashSet;
@@ -64,6 +65,14 @@ class RecipeServiceImplTest {
 
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
+    }
+
+    @Test
+    public void getRecipeByIdTestNotFound() {
+        Optional<Recipe> emptyOpt = Optional.empty();
+        when(recipeRepository.findById(anyLong())).thenReturn(emptyOpt);
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> recipeService.findById(2L), "Expected doThing() to throw, but it didn't");
+        assertEquals("Recipe Not Found", ex.getMessage());
     }
 
     @Test

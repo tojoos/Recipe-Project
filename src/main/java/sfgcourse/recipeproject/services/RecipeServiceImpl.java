@@ -46,7 +46,6 @@ public class RecipeServiceImpl implements RecipeService {
         if(recipeOptional.isEmpty()) {
             throw new NotFoundException("For Id value: " + id + " no recipe was found.");
         }
-
         return recipeOptional.get();
     }
 

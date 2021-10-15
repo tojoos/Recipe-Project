@@ -22,8 +22,8 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}/show")
-    public String showById(@PathVariable Long id, Model model) {
-        model.addAttribute("recipe", recipeService.findById(id));
+    public String showById(@PathVariable String id, Model model) {
+        model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
         return "recipe/show";
     }
 
@@ -34,8 +34,8 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}/update")
-    public String initUpdateRecipeForm(@PathVariable Long id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(id));
+    public String initUpdateRecipeForm(@PathVariable String id, Model model) {
+        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
         return "recipe/recipeform";
     }
 
@@ -54,11 +54,21 @@ public class RecipeController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound(Exception exception) {
-        log.error("handle not found exception");
+    public ModelAndView handleNotFoundException(Exception exception) {
+        return handleException(exception, "error404Page");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView handleNumberFormatException(Exception exception) {
+        return handleException(exception, "error400Page");
+    }
+
+    private ModelAndView handleException(Exception exception, String view) {
         log.error(exception.getMessage());
+
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("errorPage");
+        modelAndView.setViewName(view);
         modelAndView.addObject("exception", exception);
 
         return modelAndView;

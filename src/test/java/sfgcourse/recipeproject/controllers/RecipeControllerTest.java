@@ -104,4 +104,13 @@ class RecipeControllerTest {
 
         verify(recipeService, times(1)).deleteById(anyLong());
     }
+
+    @Test
+    void testNotFoundExceptionHandling() throws Exception {
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipes/4/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("errorPage"));
+    }
 }

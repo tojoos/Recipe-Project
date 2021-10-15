@@ -2,9 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::body})}">
 
 <body>
-    <div class="container-fluid" style="margin-top: 250px; font-size: 60px; text-align: center">
-        <div><b>Error 404</b></div>
-        <div>Page not found</div>
+    <div class="container-fluid" style="margin-top: 250px; text-align: center">
+        <div style="font-size: 60px;"><b>Error 404</b></div>
+        <div style="font-size: 40px;">Page not found</div>
+        <p style="font-size: 18px;" th:text="${exception.getMessage()}"></p>
     </div>
 </body>
 </html>

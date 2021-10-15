@@ -34,7 +34,7 @@ public class IngredientController {
         return "recipe/ingredient/list";
     }
 
-    @GetMapping("/{ingredientId}/show")
+    @GetMapping({"/{ingredientId}/show", "/{ingredientId}"})
     public String showIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
         model.addAttribute("ingredient", ingredientService.findCommandByRecipeIdandIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId)));
         return "recipe/ingredient/show";
@@ -67,27 +67,5 @@ public class IngredientController {
     public String deleteIngredientCommandById(@PathVariable String recipeId, @PathVariable String ingredientId) {
         ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(ingredientId));
         return "redirect:/recipes/" + recipeId + "/ingredients";
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFoundException(Exception exception) {
-        return handleException(exception, "error404Page");
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NumberFormatException.class)
-    public ModelAndView handleNumberFormatException(Exception exception) {
-        return handleException(exception, "error400Page");
-    }
-
-    private ModelAndView handleException(Exception exception, String view) {
-        log.error(exception.getMessage());
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(view);
-        modelAndView.addObject("exception", exception);
-
-        return modelAndView;
     }
 }

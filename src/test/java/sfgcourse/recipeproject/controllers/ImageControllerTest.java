@@ -9,6 +9,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import sfgcourse.recipeproject.commands.RecipeCommand;
+import sfgcourse.recipeproject.exceptions.NotFoundException;
 import sfgcourse.recipeproject.services.ImageService;
 import sfgcourse.recipeproject.services.RecipeService;
 
@@ -38,7 +39,10 @@ class ImageControllerTest {
         MockitoAnnotations.openMocks(this);
         imageController = new ImageController(recipeService, imageService);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(imageController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
@@ -98,5 +102,21 @@ class ImageControllerTest {
 
         //then
         assertEquals(someBytes.getBytes(StandardCharsets.UTF_8).length, responseBytes.length);
+    }
+
+    @Test
+    void testGetImageRecipeNotFoundException() throws Exception {
+        when(recipeService.findCommandById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipes/5/image"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error404Page"));
+    }
+
+    @Test
+    void testGetImageRecipeNumberFormatException() throws Exception {
+        mockMvc.perform(get("/recipes/zyx/image"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("error400Page"));
     }
 }

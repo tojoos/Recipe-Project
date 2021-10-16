@@ -7,6 +7,7 @@ import sfgcourse.recipeproject.converters.IngredientCommandToIngredient;
 import sfgcourse.recipeproject.converters.IngredientToIngredientCommand;
 import sfgcourse.recipeproject.domain.Ingredient;
 import sfgcourse.recipeproject.domain.Recipe;
+import sfgcourse.recipeproject.exceptions.NotFoundException;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 import sfgcourse.recipeproject.repositories.UnitOfMeasureRepository;
 
@@ -42,12 +43,10 @@ public class IngredientServiceImpl implements IngredientService {
             if (optIngredient.isPresent()) {
                 return optIngredient.get();
             } else {
-                log.error("Ingredient id not found: " + ingredientId);
-                return null;
+                throw new NotFoundException("For recipe id: " + recipeId + ", ingredient id: " + ingredientId +  " was not found.");
             }
         } else {
-            log.error("Recipe id not found: " + recipeId);
-            return null;
+            throw new NotFoundException("For Id value: " + recipeId + " no recipe was found.");
         }
     }
 
@@ -121,10 +120,10 @@ public class IngredientServiceImpl implements IngredientService {
                 recipe.getIngredients().remove(ingToDelete);
                 recipeRepository.save(recipe);
             } else {
-                throw new RuntimeException("Ingredient id: " + ingredientId + " not found in Recipe id: " + recipeId + ".");
+                throw new NotFoundException("Couldn't delete ingredient id: " + ingredientId + "\n For recipe id: " + recipeId + ", ingredient was not found.");
             }
         } else {
-            throw new RuntimeException("Recipe id: " + recipeId + " not found in database.");
+            throw new NotFoundException("Couldn't delete ingredient id: " + ingredientId + "\n For Id value: " + recipeId + ", no recipe was found.");
         }
     }
 }

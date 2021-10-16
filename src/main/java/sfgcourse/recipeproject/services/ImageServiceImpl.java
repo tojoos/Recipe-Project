@@ -43,6 +43,4 @@ public class ImageServiceImpl implements ImageService {
         }
         log.debug("Loaded new file.");
     }
-
-
 }

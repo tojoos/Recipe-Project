@@ -3,9 +3,12 @@ package sfgcourse.recipeproject.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import sfgcourse.recipeproject.commands.RecipeCommand;
 import sfgcourse.recipeproject.services.RecipeService;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Controller
@@ -18,9 +21,9 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/{id}/show")
-    public String showById(@PathVariable Long id, Model model) {
-        model.addAttribute("recipe", recipeService.findById(id));
+    @GetMapping({"/{id}/show", "/{id}"})
+    public String showById(@PathVariable String id, Model model) {
+        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
         return "recipe/show";
     }
 
@@ -31,13 +34,20 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}/update")
-    public String initUpdateRecipeForm(@PathVariable Long id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(id));
+    public String initUpdateRecipeForm(@PathVariable String id, Model model) {
+        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
         return "recipe/recipeform";
     }
 
     @PostMapping("/process")
-    public String processSaveOrUpdateRecipeForm(@ModelAttribute RecipeCommand command) {
+    public String processSaveOrUpdateRecipeForm(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult result) {
+
+        if(result.hasErrors()) {
+            result.getAllErrors().forEach(err -> log.debug(err.toString()));
+
+            return "recipe/recipeform";
+        }
+
         RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(command);
         return "redirect:/recipes/" + savedRecipeCommand.getId() + "/show";
     }

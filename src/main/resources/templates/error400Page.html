@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::body})}">
+
+<body>
+    <div class="container-fluid" style="margin-top: 250px; text-align: center">
+        <div style="font-size: 60px;"><b>Error 400</b></div>
+        <div style="font-size: 40px;">Bad Request</div>
+        <p style="font-size: 18px;" th:text="${exception.getMessage()}"></p>
+    </div>
+</body>
+</html>

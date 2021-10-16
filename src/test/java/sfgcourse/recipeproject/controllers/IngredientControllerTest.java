@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import sfgcourse.recipeproject.commands.IngredientCommand;
 import sfgcourse.recipeproject.commands.RecipeCommand;
+import sfgcourse.recipeproject.exceptions.NotFoundException;
 import sfgcourse.recipeproject.services.IngredientService;
 import sfgcourse.recipeproject.services.RecipeService;
 import sfgcourse.recipeproject.services.UnitOfMeasureService;
@@ -42,7 +43,10 @@ class IngredientControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         ingredientController = new IngredientController(recipeService, ingredientService, unitOfMeasureService);
-        mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(ingredientController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
@@ -122,5 +126,21 @@ class IngredientControllerTest {
                 .andExpect(view().name("redirect:/recipes/1/ingredients"));
 
         verify(ingredientService, times(1)).deleteById(anyLong(), anyLong());
+    }
+
+    @Test
+    void testGetIngredientNotFoundException() throws Exception {
+        when(ingredientService.findCommandByRecipeIdandIngredientId(anyLong(), anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipes/2/ingredients/99/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error404Page"));
+    }
+
+    @Test
+    void testGetIngredientNumberFormatException() throws Exception {
+        mockMvc.perform(get("/recipes/1/ingredients/xyz/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("error400Page"));
     }
 }

@@ -72,7 +72,7 @@ class RecipeServiceImplTest {
         Optional<Recipe> emptyOpt = Optional.empty();
         when(recipeRepository.findById(anyLong())).thenReturn(emptyOpt);
         NotFoundException ex = assertThrows(NotFoundException.class, () -> recipeService.findById(2L), "Expected doThing() to throw, but it didn't");
-        assertEquals("Recipe Not Found", ex.getMessage());
+        assertEquals("For Id value: 2 no recipe was found.", ex.getMessage());
     }
 
     @Test

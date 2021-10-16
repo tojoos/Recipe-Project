@@ -97,9 +97,15 @@
                                     <label>Source:</label>
                                     <input type="text" class="form-control" th:field="*{source}"/>
                                 </div>
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-4 form-group"  th:class="${#fields.hasErrors('url')} ?
+                                'col-md-4 form-group text-danger' : 'col-md-4 form-group'">
                                     <label>URL:</label>
                                     <input type="text" class="form-control" th:field="*{url}"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('url')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('url')}" th:text="${#strings.capitalize(err)}" style="font-size: 14px"></li>
+                                        </ul>
+                                    </span>
                                 </div>
                             </div>
                         </div>

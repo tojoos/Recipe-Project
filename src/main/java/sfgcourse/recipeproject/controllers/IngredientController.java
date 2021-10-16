@@ -3,12 +3,15 @@ package sfgcourse.recipeproject.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import sfgcourse.recipeproject.commands.IngredientCommand;
 import sfgcourse.recipeproject.commands.UnitOfMeasureCommand;
 import sfgcourse.recipeproject.services.IngredientService;
 import sfgcourse.recipeproject.services.RecipeService;
 import sfgcourse.recipeproject.services.UnitOfMeasureService;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Controller
@@ -55,7 +58,13 @@ public class IngredientController {
     }
 
     @PostMapping("/process")
-    public String processSaveOrUpdateIngredient(@ModelAttribute IngredientCommand command) {
+    public String processSaveOrUpdateIngredient(@Valid @ModelAttribute("ingredient") IngredientCommand command, BindingResult result) {
+
+        if(result.hasErrors()) {
+            result.getAllErrors().forEach(err -> log.debug(err.toString()));
+            return "recipe/ingredient/ingredientform";
+        }
+
         IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
         return "redirect:/recipes/" + savedCommand.getRecipeId() + "/ingredients/" + savedCommand.getId() + "/show";
     }

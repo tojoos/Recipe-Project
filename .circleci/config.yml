@@ -1,4 +1,4 @@
-version: 2.1
+version: 2
 jobs:
   build:
     docker:
@@ -28,8 +28,8 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
       - run: mvn integration-test coberatura:coberatura
-          - store_test_results:
-              path: target/surefire-reports
-          - run:
-              name: Send to CodeCov
-              command: bash <(curl -s https://codecov.io/bash)
+      - store_test_results:
+          path: target/surefire-reports
+      - run:
+          name: Send to CodeCov
+          command: bash <(curl -s https://codecov.io/bash)

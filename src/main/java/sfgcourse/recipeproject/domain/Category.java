@@ -1,24 +1,23 @@
 package sfgcourse.recipeproject.domain;
 
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@Data
-@Entity
+@Getter @Setter
+@ToString
+@Document
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
-
     private String categoryName;
 
-    @ManyToMany(mappedBy = "categories")
-    private Set<Recipe> recipes = new HashSet<>();
-
-    public Category() {
-    }
+    @DBRef
+    private List<Recipe> recipes;
 }

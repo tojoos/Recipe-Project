@@ -2,33 +2,33 @@ package sfgcourse.recipeproject.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
-@EqualsAndHashCode(exclude = "recipe")
-@Entity
 public class Ingredient {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private String id = UUID.randomUUID().toString();
+    private String recipeId;
 
     private String description;
     private BigDecimal amount;
 
-    @ManyToOne
-    private Recipe recipe;
-
-    @OneToOne(fetch = FetchType.EAGER) //fetch type not needed because it's default behavior
+    @DBRef
     private UnitOfMeasure uom;
 
-    public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom) {
+    public Ingredient (String description, BigDecimal amount, UnitOfMeasure uom) {
         this.description = description;
         this.amount = amount;
         this.uom = uom;
     }
 
-    public Ingredient() {
+    public Ingredient () {
+
     }
 }

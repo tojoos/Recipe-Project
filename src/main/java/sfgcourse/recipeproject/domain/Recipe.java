@@ -2,17 +2,20 @@ package sfgcourse.recipeproject.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter @Setter
-@Entity
+@Document
 public class Recipe {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String description;
@@ -21,35 +24,27 @@ public class Recipe {
     private Integer prepTime;
     private Integer cookTime;
     private Integer servings;
-
-    @Lob
     private Byte[] image;
-    @Lob
     private String directions;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    private Difficulty difficulty;
     private Notes notes;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    private Set<Ingredient> ingredients = new HashSet<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "recipe_category", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id") )
-    private Set<Category> categories = new HashSet<>();
-
-    @Enumerated(value = EnumType.STRING)
-    private Difficulty difficulty;
+    @DBRef
+    private List<Category> categories = new ArrayList<>();
 
     public void setNotes(Notes notes) {
-        if( notes != null) {
+        if(notes != null) {
             this.notes = notes;
-            notes.setRecipe(this);
         }
     }
 
-    public Recipe addIngredient(Ingredient ingredient) {
-        ingredient.setRecipe(this);
+    public void addIngredient(Ingredient ingredient) {
         this.getIngredients().add(ingredient);
-        return this;
+    }
+
+    public void addCategory(Category category) {
+        this.getCategories().add(category);
     }
 }

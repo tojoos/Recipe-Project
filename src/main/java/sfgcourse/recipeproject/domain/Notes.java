@@ -1,30 +1,39 @@
 package sfgcourse.recipeproject.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.Objects;
 
-@Data
-@EqualsAndHashCode(exclude = "recipe")
+@Getter @Setter
+@ToString
 @Entity
 public class Notes {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
-    @OneToOne
-    private Recipe recipe;
-
-    @Lob
     private String recipeNotes;
 
-    public Notes(Recipe recipe, String recipeNotes) {
-        this.recipe = recipe;
+    public Notes(String recipeNotes) {
         this.recipeNotes = recipeNotes;
     }
 
     public Notes() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Notes notes = (Notes) o;
+        return id != null && Objects.equals(id, notes.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 }

@@ -1,6 +1,8 @@
 package sfgcourse.recipeproject.commands;
 
 import java.math.BigDecimal;
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,5 +21,6 @@ public class IngredientCommand {
     @DecimalMin("0.1")
     @DecimalMax("1000")
     private BigDecimal amount;
+
     private UnitOfMeasureCommand uom;
 }

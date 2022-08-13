@@ -32,11 +32,11 @@ class IngredientToIngredientCommandTest {
     void convertNotNullUom() {
         //given
         Ingredient ingredient = new Ingredient();
-        ingredient.setId(3L);
+        ingredient.setId("3");
         ingredient.setDescription("Desc");
-        ingredient.setId(3L);
+        ingredient.setId("3");
         UnitOfMeasure uom = new UnitOfMeasure();
-        uom.setId(2L);
+        uom.setId("2");
         ingredient.setUom(uom);
 
         //when
@@ -56,9 +56,9 @@ class IngredientToIngredientCommandTest {
     void convertNullUom() {
         //given
         Ingredient ingredient = new Ingredient();
-        ingredient.setId(3L);
+        ingredient.setId("3");
         ingredient.setDescription("Desc");
-        ingredient.setId(3L);
+        ingredient.setId("3");
         ingredient.setUom(null);
 
         //when

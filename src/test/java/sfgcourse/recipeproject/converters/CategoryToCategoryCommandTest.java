@@ -30,7 +30,7 @@ class CategoryToCategoryCommandTest {
     void convert() {
         //given
         Category category = new Category();
-        category.setId(1L);
+        category.setId("1");
         category.setCategoryName("Name1");
 
         //when

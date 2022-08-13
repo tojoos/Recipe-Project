@@ -10,8 +10,8 @@ import javax.validation.constraints.*;
 @Getter @Setter
 @NoArgsConstructor
 public class IngredientCommand {
-    private Long id;
-    private Long RecipeId;
+    private String id;
+    private String RecipeId;
 
     @NotBlank
     private String description;

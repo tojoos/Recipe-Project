@@ -31,7 +31,7 @@ class IngredientCommandToIngredientTest {
     @Test
     void convert() {
         IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setId(2L);
+        ingredientCommand.setId("2");
         ingredientCommand.setDescription("Some info");
         UnitOfMeasureCommand unit = new UnitOfMeasureCommand();
         unit.setUom("some Uom");
@@ -49,7 +49,7 @@ class IngredientCommandToIngredientTest {
     @Test
     void convertWithNullOum() {
         IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setId(2L);
+        ingredientCommand.setId("2");
         ingredientCommand.setDescription("Some info");
         ingredientCommand.setUom(null);
 

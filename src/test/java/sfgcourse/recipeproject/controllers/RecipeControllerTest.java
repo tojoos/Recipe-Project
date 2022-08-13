@@ -42,9 +42,9 @@ class RecipeControllerTest {
     @Test
     void showById() throws Exception {
         RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(1L);
+        recipeCommand.setId("1");
 
-        when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
 
         mockMvc.perform(get("/recipes/1/show"))
                 .andExpect(status().isOk())
@@ -63,7 +63,7 @@ class RecipeControllerTest {
     @Test
     void testPostNewRecipeForm() throws Exception {
         RecipeCommand command = new RecipeCommand();
-        command.setId(2L);
+        command.setId("2");
 
         when(recipeService.saveRecipeCommand(any())).thenReturn(command);
 
@@ -80,7 +80,7 @@ class RecipeControllerTest {
     @Test
     void testPostNewRecipeFormValidationFail() throws Exception {
         RecipeCommand command = new RecipeCommand();
-        command.setId(2L);
+        command.setId("2");
 
         when(recipeService.saveRecipeCommand(any())).thenReturn(command);
 
@@ -95,9 +95,9 @@ class RecipeControllerTest {
     @Test
     void testGetUpdateView() throws Exception {
         RecipeCommand command = new RecipeCommand();
-        command.setId(2L);
+        command.setId("2");
 
-        when(recipeService.findCommandById(anyLong())).thenReturn(command);
+        when(recipeService.findCommandById(anyString())).thenReturn(command);
 
         mockMvc.perform(get("/recipes/1/update"))
                 .andExpect(status().isOk())
@@ -111,20 +111,20 @@ class RecipeControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
-        verify(recipeService, times(1)).deleteById(anyLong());
+        verify(recipeService, times(1)).deleteById(anyString());
     }
 
     @Test
     void testGetRecipeNotFoundException() throws Exception {
-        when(recipeService.findCommandById(anyLong())).thenThrow(NotFoundException.class);
-        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+        when(recipeService.findCommandById(anyString())).thenThrow(NotFoundException.class);
+        when(recipeService.findById(anyString())).thenThrow(NotFoundException.class);
 
         mockMvc.perform(get("/recipes/4/show"))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name("error404Page"));
     }
 
-    @Test
+    //@Test
     void testGetRecipeNumberFormatException() throws Exception {
         mockMvc.perform(get("/recipes/xyz/show"))
                 .andExpect(status().isBadRequest())

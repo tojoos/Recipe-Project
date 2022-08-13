@@ -49,10 +49,10 @@ class ImageControllerTest {
     void testShowUploadImageForm() throws Exception {
         //given
         RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(1L);
+        recipeCommand.setId("1");
 
         //when
-        when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
 
         //then
         mockMvc.perform(get("/recipes/1/image"))
@@ -60,7 +60,7 @@ class ImageControllerTest {
                 .andExpect(view().name("recipe/imageform"))
                 .andExpect(model().attributeExists("recipe"));
 
-        verify(recipeService, times(1)).findCommandById(anyLong());
+        verify(recipeService, times(1)).findCommandById(anyString());
     }
 
     @Test
@@ -73,14 +73,14 @@ class ImageControllerTest {
                 .andExpect(view().name("redirect:/recipes/1/show"))
                 .andExpect(header().string("Location", "/recipes/1/show"));
 
-        verify(imageService, times(1)).saveImageFile(anyLong(), any());
+        verify(imageService, times(1)).saveImageFile(anyString(), any());
     }
 
     @Test
     void testRenderImageFromDB() throws Exception {
         //given
         RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(2L);
+        recipeCommand.setId("2");
 
         String someBytes = "some bytes";
         Byte[] bytes = new Byte[someBytes.getBytes(StandardCharsets.UTF_8).length];
@@ -92,7 +92,7 @@ class ImageControllerTest {
         recipeCommand.setImage(bytes);
 
         //when
-        when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
 
         MockHttpServletResponse response = mockMvc.perform(get("/recipes/2/recipeimage"))
                 .andExpect(status().isOk())
@@ -106,14 +106,14 @@ class ImageControllerTest {
 
     @Test
     void testGetImageRecipeNotFoundException() throws Exception {
-        when(recipeService.findCommandById(anyLong())).thenThrow(NotFoundException.class);
+        when(recipeService.findCommandById(anyString())).thenThrow(NotFoundException.class);
 
         mockMvc.perform(get("/recipes/5/image"))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name("error404Page"));
     }
 
-    @Test
+    //@Test
     void testGetImageRecipeNumberFormatException() throws Exception {
         mockMvc.perform(get("/recipes/zyx/image"))
                 .andExpect(status().isBadRequest())

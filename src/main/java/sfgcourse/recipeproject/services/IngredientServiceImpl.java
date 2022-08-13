@@ -14,6 +14,7 @@ import sfgcourse.recipeproject.repositories.UnitOfMeasureRepository;
 import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -33,7 +34,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient findByRecipeIdandId(Long recipeId, Long ingredientId) {
+    public Ingredient findByRecipeIdandId(String recipeId, String ingredientId) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
         if(optionalRecipe.isPresent()) {
             Optional<Ingredient> optIngredient = optionalRecipe.get().getIngredients()
@@ -51,60 +52,66 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public IngredientCommand findCommandByRecipeIdandIngredientId(Long recipeId, Long ingredientId) {
+    public IngredientCommand findCommandByRecipeIdandIngredientId(String recipeId, String ingredientId) {
         return ingToIngCommandConverter.convert(findByRecipeIdandId(recipeId, ingredientId));
     }
 
     @Override
     @Transactional
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
-        Optional<Recipe> optionalRecipe = recipeRepository.findById(ingredientCommand.getRecipeId());
+        Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
 
-        if(optionalRecipe.isPresent()) {
-            Recipe recipe = optionalRecipe.get();
-            if(ingredientCommand.getId() == null) {
-                long maxId = 1;
-                for(Recipe r : recipeRepository.findAll()) {
-                    for(Ingredient ing : r.getIngredients()) {
-                        if(ing.getId() >= maxId)
-                            maxId = ing.getId();
-                    }
-                }
-                ingredientCommand.setId(maxId + 1);
-            }
+        if(!recipeOptional.isPresent()){
+            //todo toss error if not found!
+            log.error("Recipe not found for id: " + ingredientCommand.getRecipeId());
+            return new IngredientCommand();
+        } else {
+            Recipe recipe = recipeOptional.get();
 
-            Optional<Ingredient> optionalIngredient = recipe.getIngredients()
+            Optional<Ingredient> ingredientOptional = recipe
+                    .getIngredients()
                     .stream()
-                    .filter(ing -> ing.getId().equals(ingredientCommand.getId()))
+                    .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
                     .findFirst();
 
-            if(optionalIngredient.isPresent()) {
-                Ingredient existingIngredient = optionalIngredient.get();
-                existingIngredient.setDescription(ingredientCommand.getDescription());
-                existingIngredient.setAmount(ingredientCommand.getAmount());
-                existingIngredient.setUom(unitOfMeasureRepository
+            if(ingredientOptional.isPresent()){
+                Ingredient ingredientFound = ingredientOptional.get();
+                ingredientFound.setDescription(ingredientCommand.getDescription());
+                ingredientFound.setAmount(ingredientCommand.getAmount());
+                ingredientFound.setUom(unitOfMeasureRepository
                         .findById(ingredientCommand.getUom().getId())
-                        .orElseThrow(() -> new RuntimeException("Uom not found")));
+                        .orElseThrow(() -> new RuntimeException("UOM NOT FOUND"))); //todo address this
             } else {
-                recipe.addIngredient(Objects.requireNonNull(ingCommandToIngConverter.convert(ingredientCommand)));
+                //add new Ingredient
+                Ingredient ingredient = ingCommandToIngConverter.convert(ingredientCommand);
+                //  ingredient.setRecipe(recipe);
+                recipe.addIngredient(ingredient);
             }
 
             Recipe savedRecipe = recipeRepository.save(recipe);
 
-            return ingToIngCommandConverter.convert(savedRecipe.getIngredients()
-                    .stream()
-                    .filter(ing -> ing.getId().equals(ingredientCommand.getId()))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Couldn't find new ingredient")));
+            Optional<Ingredient> savedIngredientOptional = savedRecipe.getIngredients().stream()
+                    .filter(recipeIngredients -> recipeIngredients.getId().equals(ingredientCommand.getId()))
+                    .findFirst();
 
-        } else {
-            log.error("Recipe not found for id: " + ingredientCommand.getRecipeId());
-            return new IngredientCommand();
+            //check by description
+            if(!savedIngredientOptional.isPresent()){
+                //not totally safe... But best guess
+                savedIngredientOptional = Optional.ofNullable(savedRecipe.getIngredients().stream()
+                        .filter(recipeIngredients -> recipeIngredients.getDescription().equals(ingredientCommand.getDescription()))
+                        .filter(recipeIngredients -> recipeIngredients.getAmount().equals(ingredientCommand.getAmount()))
+                        .filter(recipeIngredients -> recipeIngredients.getUom().getId().equals(ingredientCommand.getUom().getId()))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Couldn't find new ingredient")));
+            }
+
+            //to do check for fail
+            return ingToIngCommandConverter.convert(savedIngredientOptional.get());
         }
     }
 
     @Override
-    public void deleteById(Long recipeId, Long ingredientId) {
+    public void deleteById(String recipeId, String ingredientId) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
 
         if(optionalRecipe.isPresent()) {

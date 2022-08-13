@@ -30,7 +30,7 @@ class NotesCommandToNotesTest {
     void convert() {
         NotesCommand notesCommand = new NotesCommand();
         notesCommand.setRecipeNotes("Some notes");
-        notesCommand.setId(1L);
+        notesCommand.setId("1");
 
         Notes savedNotes = converter.convert(notesCommand);
 

@@ -30,7 +30,7 @@ class UnitOfMeasureToUnitOfMeasureCommandTest {
     @Test
     void convert() {
         UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
-        unitOfMeasure.setId(3L);
+        unitOfMeasure.setId("3");
         unitOfMeasure.setUom("Some uom2");
 
         UnitOfMeasureCommand savedUom = converter.convert(unitOfMeasure);

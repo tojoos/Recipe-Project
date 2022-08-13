@@ -34,7 +34,7 @@ class RecipeToRecipeCommandTest {
     @Test
     void convert() {
         Recipe recipe = new Recipe();
-        recipe.setId(3L);
+        recipe.setId("3");
 
         Set<Ingredient> ingredientSet = new HashSet<>();
         Ingredient ingredient1 = new Ingredient();
@@ -49,7 +49,7 @@ class RecipeToRecipeCommandTest {
         recipe.setCategories(categorySet);
 
         Notes notes = new Notes();
-        notes.setId(3L);
+        notes.setId("3");
         recipe.setNotes(notes);
 
         RecipeCommand savedRecipe = converter.convert(recipe);

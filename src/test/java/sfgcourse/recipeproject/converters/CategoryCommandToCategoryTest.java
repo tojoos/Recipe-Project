@@ -31,7 +31,7 @@ class CategoryCommandToCategoryTest {
         //given
         CategoryCommand categoryCommand = new CategoryCommand();
         categoryCommand.setCategoryName("Name1");
-        categoryCommand.setId(1L);
+        categoryCommand.setId("1");
 
         //when
         Category category = converter.convert(categoryCommand);

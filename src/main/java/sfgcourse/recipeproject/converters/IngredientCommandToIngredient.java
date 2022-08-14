@@ -20,8 +20,10 @@ public class IngredientCommandToIngredient implements Converter<IngredientComman
     public Ingredient convert(IngredientCommand source) {
         if(source == null)
             return null;
-        final Ingredient ingredient = new Ingredient();
-        ingredient.setId(source.getId());
+        Ingredient ingredient = new Ingredient();
+        if(source.getId() != null)
+            ingredient.setId(source.getId());
+        ingredient.setRecipeId(source.getRecipeId());
         ingredient.setAmount(source.getAmount());
         ingredient.setDescription(source.getDescription());
         ingredient.setUom(uomConverter.convert(source.getUom()));

@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import sfgcourse.recipeproject.commands.*;
 import sfgcourse.recipeproject.domain.Recipe;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,14 +38,14 @@ class RecipeCommandToRecipeTest {
         RecipeCommand recipeCommand = new RecipeCommand();
         recipeCommand.setId("1");
 
-        Set<IngredientCommand> ingredientCommandSet = new HashSet<>();
+        List<IngredientCommand> ingredientCommandSet = new ArrayList<>();
         IngredientCommand ingredientCommand1 = new IngredientCommand();
         ingredientCommand1.setUom(new UnitOfMeasureCommand());
         ingredientCommandSet.add(ingredientCommand1);
         ingredientCommandSet.add(new IngredientCommand());
         recipeCommand.setIngredients(ingredientCommandSet);
 
-        Set<CategoryCommand> categoryCommandSet = new HashSet<>();
+        List<CategoryCommand> categoryCommandSet = new ArrayList<>();
         categoryCommandSet.add(new CategoryCommand());
         recipeCommand.setCategories(categoryCommandSet);
 

@@ -11,10 +11,7 @@ import sfgcourse.recipeproject.exceptions.NotFoundException;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 import sfgcourse.recipeproject.repositories.UnitOfMeasureRepository;
 
-import javax.transaction.Transactional;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -42,7 +39,9 @@ public class IngredientServiceImpl implements IngredientService {
                     .filter(ing -> ing.getId().equals(ingredientId))
                     .findFirst();
             if (optIngredient.isPresent()) {
-                return optIngredient.get();
+                Ingredient ingredient = optIngredient.get();
+                ingredient.setRecipeId(recipeId);
+                return ingredient;
             } else {
                 throw new NotFoundException("For recipe id: " + recipeId + ", ingredient id: " + ingredientId +  " was not found.");
             }
@@ -57,7 +56,6 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    @Transactional
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
 
@@ -77,14 +75,13 @@ public class IngredientServiceImpl implements IngredientService {
             if(ingredientOptional.isPresent()){
                 Ingredient ingredientFound = ingredientOptional.get();
                 ingredientFound.setDescription(ingredientCommand.getDescription());
+                ingredientFound.setRecipeId(ingredientCommand.getRecipeId());
                 ingredientFound.setAmount(ingredientCommand.getAmount());
                 ingredientFound.setUom(unitOfMeasureRepository
                         .findById(ingredientCommand.getUom().getId())
                         .orElseThrow(() -> new RuntimeException("UOM NOT FOUND"))); //todo address this
             } else {
-                //add new Ingredient
                 Ingredient ingredient = ingCommandToIngConverter.convert(ingredientCommand);
-                //  ingredient.setRecipe(recipe);
                 recipe.addIngredient(ingredient);
             }
 
@@ -106,12 +103,18 @@ public class IngredientServiceImpl implements IngredientService {
             }
 
             //to do check for fail
+
+            //enhance with id value
+            IngredientCommand ingredientCommandSaved = ingToIngCommandConverter.convert(savedIngredientOptional.get());
+            ingredientCommandSaved.setRecipeId(recipe.getId());
+
             return ingToIngCommandConverter.convert(savedIngredientOptional.get());
         }
     }
 
     @Override
     public void deleteById(String recipeId, String ingredientId) {
+        System.out.println("recipe id in delete" + recipeId);
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
 
         if(optionalRecipe.isPresent()) {
@@ -123,7 +126,6 @@ public class IngredientServiceImpl implements IngredientService {
 
             if(optionalIngredient.isPresent()) {
                 Ingredient ingToDelete = optionalIngredient.get();
-                ingToDelete.setRecipe(null);
                 recipe.getIngredients().remove(ingToDelete);
                 recipeRepository.save(recipe);
             } else {

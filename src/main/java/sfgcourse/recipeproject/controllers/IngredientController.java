@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import sfgcourse.recipeproject.commands.IngredientCommand;
 import sfgcourse.recipeproject.commands.UnitOfMeasureCommand;
+import sfgcourse.recipeproject.domain.Ingredient;
 import sfgcourse.recipeproject.services.IngredientService;
 import sfgcourse.recipeproject.services.RecipeService;
 import sfgcourse.recipeproject.services.UnitOfMeasureService;
@@ -42,7 +43,9 @@ public class IngredientController {
 
     @GetMapping("/{ingredientId}/update")
     public String initUpdateIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
-        model.addAttribute("ingredient", ingredientService.findCommandByRecipeIdandIngredientId(recipeId, ingredientId));
+        IngredientCommand ingredientCommand = ingredientService.findCommandByRecipeIdandIngredientId(recipeId, ingredientId);
+        ingredientCommand.setRecipeId(recipeId);
+        model.addAttribute("ingredient", ingredientCommand);
         model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         return "recipe/ingredient/ingredientform";
     }

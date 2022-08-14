@@ -16,7 +16,6 @@ import java.util.*;
 
 @Slf4j
 @Component
-@Profile("default")
 public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final RecipeRepository recipeRepository;
@@ -32,8 +31,62 @@ public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent>
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        loadCategories();
+        loadUom();
         recipeRepository.saveAll(getRecipes());
         log.debug("Loading bootstrap data");
+    }
+
+    private void loadCategories(){
+        Category cat1 = new Category();
+        cat1.setCategoryName("American");
+        categoryRepository.save(cat1);
+
+        Category cat2 = new Category();
+        cat2.setCategoryName("Italian");
+        categoryRepository.save(cat2);
+
+        Category cat3 = new Category();
+        cat3.setCategoryName("Mexican");
+        categoryRepository.save(cat3);
+
+        Category cat4 = new Category();
+        cat4.setCategoryName("Fast Food");
+        categoryRepository.save(cat4);
+    }
+
+    private void loadUom(){
+        UnitOfMeasure uom1 = new UnitOfMeasure();
+        uom1.setUom("Teaspoon");
+        unitOfMeasureRepository.save(uom1);
+
+        UnitOfMeasure uom2 = new UnitOfMeasure();
+        uom2.setUom("Tablespoon");
+        unitOfMeasureRepository.save(uom2);
+
+        UnitOfMeasure uom3 = new UnitOfMeasure();
+        uom3.setUom("Cup");
+        unitOfMeasureRepository.save(uom3);
+
+        UnitOfMeasure uom4 = new UnitOfMeasure();
+        uom4.setUom("Pinch");
+        unitOfMeasureRepository.save(uom4);
+
+        UnitOfMeasure uom5 = new UnitOfMeasure();
+        uom5.setUom("Ounce");
+        unitOfMeasureRepository.save(uom5);
+
+        UnitOfMeasure uom6 = new UnitOfMeasure();
+        uom6.setUom("Each");
+        unitOfMeasureRepository.save(uom6);
+
+        UnitOfMeasure uom7 = new UnitOfMeasure();
+        uom7.setUom("Pint");
+        unitOfMeasureRepository.save(uom7);
+
+        UnitOfMeasure uom8 = new UnitOfMeasure();
+        uom8.setUom("Dash");
+        unitOfMeasureRepository.save(uom8);
     }
 
     public List<Recipe> getRecipes() {
@@ -77,7 +130,7 @@ public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent>
         perfectGuacamole.getCategories().add(mexicanCategory);
         perfectGuacamole.setSource("simplyrecipes.com");
         perfectGuacamole.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
-        perfectGuacamole.setNotes(new Notes(perfectGuacamole, "Be careful handling chilis! If using, it's best to wear food-safe gloves. If no gloves are available, wash your hands thoroughly after handling, and do not touch your eyes or the area near your eyes for several hours afterwards."));
+        perfectGuacamole.setNotes(new Notes("Be careful handling chilis! If using, it's best to wear food-safe gloves. If no gloves are available, wash your hands thoroughly after handling, and do not touch your eyes or the area near your eyes for several hours afterwards."));
         perfectGuacamole.setDirections("1. Cut the avocado:\n" +
                 "Cut the avocados in half. Remove the pit. Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon. (See How to Cut and Peel an Avocado.) Place in a bowl." +
                 "\n 2. Mash the avocado flesh:\n" +
@@ -118,7 +171,7 @@ public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent>
         chickenTaco.getCategories().add(mexicanCategory);
         chickenTaco.setSource("simplyrecipes.com");
         chickenTaco.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
-        chickenTaco.setNotes(new Notes(chickenTaco, "We have a family motto and it is this: Everything goes better in a tortilla.\n" +
+        chickenTaco.setNotes(new Notes("We have a family motto and it is this: Everything goes better in a tortilla.\n" +
                 "Any and every kind of leftover can go inside a warm tortilla, usually with a healthy dose of pickled jalapenos. I can always sniff out a late-night snacker when the aroma of tortillas heating in a hot pan on the stove comes wafting through the house.\n" +
                 "Today’s tacos are more purposeful – a deliberate meal instead of a secretive midnight snack!\n" +
                 "First, I marinate the chicken briefly in a spicy paste of ancho chile powder, oregano, cumin, and sweet orange juice while the grill is heating. You can also use this time to prepare the taco toppings.\n" +
@@ -153,7 +206,6 @@ public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent>
         chickenTaco.addIngredient(new Ingredient("lime, cut into wedges", new BigDecimal(4), eachUom));
 
         recipeList.add(chickenTaco);
-
 
         return recipeList;
     }

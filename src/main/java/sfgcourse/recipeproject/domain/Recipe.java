@@ -7,9 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter @Setter
 @Document
@@ -41,6 +39,7 @@ public class Recipe {
     }
 
     public void addIngredient(Ingredient ingredient) {
+        ingredient.setRecipeId(this.id);
         this.getIngredients().add(ingredient);
     }
 

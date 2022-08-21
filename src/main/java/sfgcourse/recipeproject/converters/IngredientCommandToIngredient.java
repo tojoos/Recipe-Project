@@ -21,7 +21,7 @@ public class IngredientCommandToIngredient implements Converter<IngredientComman
         if(source == null)
             return null;
         Ingredient ingredient = new Ingredient();
-        if(source.getId() != null)
+        if(source.getId() != null && !source.getId().isEmpty())
             ingredient.setId(source.getId());
         ingredient.setRecipeId(source.getRecipeId());
         ingredient.setAmount(source.getAmount());

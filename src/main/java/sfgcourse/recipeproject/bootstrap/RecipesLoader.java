@@ -1,8 +1,8 @@
 package sfgcourse.recipeproject.bootstrap;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +10,9 @@ import sfgcourse.recipeproject.domain.*;
 import sfgcourse.recipeproject.repositories.CategoryRepository;
 import sfgcourse.recipeproject.repositories.RecipeRepository;
 import sfgcourse.recipeproject.repositories.UnitOfMeasureRepository;
+import sfgcourse.recipeproject.repositories.reactive.CategoryReactiveRepository;
+import sfgcourse.recipeproject.repositories.reactive.RecipeReactiveRepository;
+import sfgcourse.recipeproject.repositories.reactive.UnitOfMeasureReactiveRepository;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -21,6 +24,16 @@ public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent>
     private final RecipeRepository recipeRepository;
     private final CategoryRepository categoryRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
+
+    @Autowired
+    CategoryReactiveRepository categoryReactiveRepository;
+
+    @Autowired
+    UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
+
+    @Autowired
+    RecipeReactiveRepository recipeReactiveRepository;
+
 
     public RecipesLoader(RecipeRepository recipeRepository, CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
         this.recipeRepository = recipeRepository;
@@ -35,6 +48,10 @@ public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent>
         loadUom();
         recipeRepository.saveAll(getRecipes());
         log.debug("Loading bootstrap data");
+
+        log.info("Recipes in repository: " + recipeReactiveRepository.count().block().toString());
+        log.info("Units of measure in repository: " + unitOfMeasureReactiveRepository.count().block().toString());
+        log.info("Categories in repository: " + categoryReactiveRepository.count().block().toString());
     }
 
     private void loadCategories(){
@@ -150,14 +167,26 @@ public class RecipesLoader implements ApplicationListener<ContextRefreshedEvent>
                 "\n" +
                 "Note: Chilling tomatoes hurts their flavor. So, if you want to add chopped tomato to your guacamole, add it just before serving.");
 
-        perfectGuacamole.addIngredient(new Ingredient("ripe avocados", new BigDecimal(2), eachUom));
-        perfectGuacamole.addIngredient(new Ingredient("Kosher salt", new BigDecimal(".5"), teaSpoonUom));
-        perfectGuacamole.addIngredient(new Ingredient("fresh lime juice or lemon juice", new BigDecimal(2), tableSpoonUom));
-        perfectGuacamole.addIngredient(new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal(2), tableSpoonUom));
-        perfectGuacamole.addIngredient(new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(2), eachUom));
-        perfectGuacamole.addIngredient(new Ingredient("Cilantro", new BigDecimal(2), tableSpoonUom));
-        perfectGuacamole.addIngredient(new Ingredient("freshly grated black pepper", new BigDecimal(2), dashUom));
-        perfectGuacamole.addIngredient(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), eachUom));
+        Ingredient ingredient1 = new Ingredient("ripe avocados", new BigDecimal(2), eachUom);
+        Ingredient ingredient2 = new Ingredient("Kosher salt", new BigDecimal(".5"), teaSpoonUom);
+        Ingredient ingredient3 = new Ingredient("fresh lime juice or lemon juice", new BigDecimal(2), tableSpoonUom);
+        Ingredient ingredient4 = new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal(2), tableSpoonUom);
+        Ingredient ingredient5 = new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(2), eachUom);
+        Ingredient ingredient6 = new Ingredient("Cilantro", new BigDecimal(2), tableSpoonUom);
+        Ingredient ingredient7 = new Ingredient("freshly grated black pepper", new BigDecimal(2), dashUom);
+        Ingredient ingredient8 = new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), eachUom);
+
+        List<Ingredient> firstIngredients = new ArrayList<>();
+        firstIngredients.add(ingredient1);
+        firstIngredients.add(ingredient2);
+        firstIngredients.add(ingredient3);
+        firstIngredients.add(ingredient4);
+        firstIngredients.add(ingredient5);
+        firstIngredients.add(ingredient6);
+        firstIngredients.add(ingredient7);
+        firstIngredients.add(ingredient8);
+
+        perfectGuacamole.addAllIngredients(firstIngredients);
 
         recipeList.add(perfectGuacamole);
 

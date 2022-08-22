@@ -43,6 +43,13 @@ public class Recipe {
         this.getIngredients().add(ingredient);
     }
 
+    public void addAllIngredients(List<Ingredient> ingredients) {
+        if(ingredients != null && !ingredients.isEmpty()) {
+            ingredients.forEach(i -> i.setRecipeId(this.id));
+            this.getIngredients().addAll(ingredients);
+        }
+    }
+
     public void addCategory(Category category) {
         this.getCategories().add(category);
     }
